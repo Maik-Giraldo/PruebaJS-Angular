@@ -1,0 +1,65 @@
+.search-icon {
+    font-size: 27px;
+    vertical-align: -8px;
+}
+
+.spinner {
+    height: 75px;
+    width: 75px;
+}
+
+.card {
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: inset 0 0 2px;
+}
+
+.text-small {
+    font-size: 0.8rem;
+}
+
+.page-link {
+    cursor: pointer;
+    display: inline !important;
+}
+
+.pagination-style {
+    list-style: none;
+    display: inline;
+}
+
+.pagination-style li {
+    width: 33px;
+    display: inline;
+}
+
+.input-range-pagination {
+    text-align: center;
+    width: 50px;
+    height: 20px;
+    font-size: 13px;
+    outline: tomato solid 1px;
+    border-radius: 5px;
+    box-shadow: none;
+    border: none;
+}
+
+.visibility-hidden {
+    visibility: hidden;
+}
+
+.export-icon {
+    cursor: pointer;
+    vertical-align: -6px;
+    padding: 3px;
+    transition-duration: 200ms;
+}
+
+.export-icon:hover {
+    background-color: rgb(207, 210, 214);
+    border-radius: 3px;
+}

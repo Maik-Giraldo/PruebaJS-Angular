@@ -1,0 +1,122 @@
+<app-navbar></app-navbar>
+
+<div class="row mt-4 animated fadeIn">
+    <div class="row mb-4">
+        <div class="col-md-12 text-center" [formGroup]="formSearch">
+            <i class="material-icons search-icon">search</i>
+            <input type="search" placeholder="Buscar libros"
+                formControlName="book" class="form-control d-inline w-50">
+        </div>
+    </div>
+
+    <!-- Not found results -->
+    <div class="ro animated fadeInw animated fadeIn" *ngIf="books.books.length == 0 && !loading">
+        <div class="col-md-12">
+            <div class="alert alert-dismissible alert-primary w-50 mx-auto text-center">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                No se encontraron libros
+            </div>
+        </div>
+    </div>
+
+    <!-- Number view -->
+    <div class="row mb-4 animated fadeIn" *ngIf="books.books.length != 0">
+        <div class="col-md-12 text-center" [formGroup]="formBookPagination">
+            Mostrando 1 de  <input type="number" class="input-range-pagination"
+                formControlName="bookView">
+                libros
+                <i class="material-icons export-icon" (click)="generateExcel()"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar libros">save_alt</i>
+        </div>
+    </div>
+
+    <!-- Paginator -->
+    <div class="row mb-4 animated fadeIn user-select-none" *ngIf="!loading">
+        <div class="col-md-12 text-center">
+            <ul class="pagination-style w-50">
+                <ng-container *ngFor="let p of books.page | paginatorConvert: books.total: bookPagination?.value as pageList">
+                    <li class="page-item" (click)="prevPage()" *ngIf="p == books.page">
+                        <a class="page-link">&laquo;</a>
+                    </li>
+
+                    <li class="page-item active" *ngIf="p == books.page">
+                        <a class="page-link">{{ p }}</a>
+                    </li>
+
+                    <li class="page-item" (click)="setPage(p)" *ngIf="p != books.page">
+                        <a class="page-link">{{ p }}</a>
+                    </li>
+
+                    <li class="page-item" (click)="nextPage()" *ngIf="p == pageList[4]">
+                        <a class="page-link">&raquo;</a>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Books view -->
+    <div class="row mx-auto animated fadeIn">
+        <div class="col-md-2 animated fadeIn" *ngFor="let book of books?.books">
+            <div class="card mb-3 mx-auto" (click)="setModalBook(book)">
+                <div class="card-body">
+                    <h6 class="card-title text-center" [title]="book.title">
+                        {{ book.title | limitWord : 20 }}
+                    </h6>
+                </div>
+                <img [src]="book.image" alt="{{ book.title }}" height="230px">
+                <div class="card-body">
+                    <h6 class="text-small">
+                        <b>Price:</b> {{ book.price }}
+                    </h6>
+
+                    <h6 class="text-small">
+                        <b>Isbn13:</b> {{ book.isbn13 }}
+                    </h6>
+
+                    <h6 class="text-small" [title]="book.subtitle">
+                        <b>Subtitle:</b> {{ book.subtitle | findSubtitle | limitWord : 35 }}
+                    </h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-mb-12" *ngIf="loading">
+            <div class="spinner-grow text-info spinner mx-auto d-block" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Internet error view -->
+    <div class="row animated fadeIn" *ngIf="internetError">
+        <div class="col-md-12">
+            <div class="alert alert-dismissible alert-primary w-50 mx-auto text-center">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                No hay conexión a internet o es deficiente
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View modal -->
+<div id="source-modal" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ sourceModal.title }}</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <img src="{{ sourceModal.image }}" alt="{{ sourceModal.title }}" height="330px">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<button #btnModalBook type="button" class="btn btn-primary position-fixed visibility-hidden"
+    data-bs-toggle="modal" data-bs-target="#source-modal">
+    Launch demo modal
+</button>
